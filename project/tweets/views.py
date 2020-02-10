@@ -18,6 +18,8 @@ class TweetsViewset(viewsets.ModelViewSet):
     filter_fields = "__all__"
     permission_classes = (ActionBasedPermission,)
     pagination_class = None
+    ordering = ("-created", )
+    ordering_fields = ("created", "name", )
     action_permissions = {
         permissions.IsAuthenticated: [
             "update",
@@ -32,4 +34,5 @@ class TweetsViewset(viewsets.ModelViewSet):
 
     def get_queryset(self) -> QuerySet:
         tweets = Tweet.objects.filter(approved=True)
+        tweets = self.filter_queryset(tweets)
         return tweets
